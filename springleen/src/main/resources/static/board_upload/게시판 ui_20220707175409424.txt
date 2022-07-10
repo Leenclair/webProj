@@ -1,0 +1,232 @@
+1. BoardWrite.js
+
+<div>
+            <Form>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>제목 </Form.Label>
+<Col sm={10}>
+                    <Form.Control type="text" placeholder="제목" 		    
+                        name="title" />
+                </Col>            
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>작성자</Form.Label>
+                <Col sm={10}>
+                    <Form.Control type="text" placeholder="작성자" 
+		    ref={(el) => { inputRef.current["name"] = el; }}
+                        name="name" value={board.name}  onChange={handleInputChange} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalPassword">
+                <Form.Label column sm={2}>비밀번호 </Form.Label>
+                <Col sm={10}>
+                <Form.Control type="password" placeholder="비밀번호" 
+	    ref={(el) => { inputRef.current["title"] = el; }}
+                    name="pwd" value={board.pwd}  onChange={handleInputChange}/>
+                </Col>
+            </Form.Group> 
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>
+                    이메일
+                </Form.Label>
+                <Col sm={10}>
+                    <Form.Control type="text" placeholder="이메일" 
+                        name="email" value={board.email} 
+                        onChange={handleInputChange} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>
+                    내용
+                </Form.Label>
+                <Col sm={10}>
+                    <Form.Control as="textarea" rows={9} 
+                        name="content" value={board.content} 
+                        onChange={handleInputChange}/>
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+                <Col sm={{ span: 10, offset: 2 }}>
+                <Button type="button" >등록</Button>{' '}
+                <Button type = "button" variant="danger" >목록</Button>
+                </Col>
+            </Form.Group>
+            </Form>
+
+------------------
+
+2. BoardList.js
+
+
+        <div>
+            <h2>자유게시판</h2>
+	<div className="divList2">
+		<Table striped bordered hover>
+			<thead>
+				<tr>	<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>이메일</th>
+					<th>작성일</th>
+					<th>조회수</th>
+				</tr>
+			</thead> 
+			<tbody> 
+					  
+			</tbody>
+		</Table>	   
+	</div>
+	<div >
+		<Pagination  className='justify-content-center' >
+		
+								
+		</Pagination>
+	</div>
+	<div className="divSearch2"> 
+		<Form>										<Row className="mb-3">
+				<Col xs={3}>
+				<Form.Select  aria-label="Default select example"
+				name="searchCondition" 	>
+					<option value="title">제목</option>
+					<option value="content">내용</option>
+					<option value="name">작성자</option>
+				</Form.Select>
+				</Col>	
+				<Col xs={6}>	
+				<Form.Control type="text" 
+				placeholder="검색어" 
+				name="searchKeyword"  />	
+				</Col>
+				<Col xs={1}>								
+				<Button variant="primary" type="button">검색</Button>
+				</Col>
+			</Row>
+			
+		</Form>
+	</div>
+	<div className="divBtn">
+		글쓰기
+	</div>
+        </div>
+
+------------
+BoardDetail.js
+
+<div className='divDetail'>
+            <h2>글 상세보기</h2>
+            <div className="divForm">            
+                <div className="firstDiv">
+                    <span className="sp1">제목</span> 
+                    <span></span>
+                </div>
+                <div>
+                    <span className="sp1">작성자</span>  
+		    <span></span>
+                </div>
+                <div>
+                    <span className="sp1">등록일</span>   
+	    <span></span>
+                </div>
+                <div>
+                    <span className="sp1">조회수</span>   
+		    <span></span>
+                </div>                
+                <div className="lastDiv">			
+                    <p className="content"></p>
+                </div>               
+                <div className="center">
+                    수정 | 
+                    삭제 | 
+                   목록
+                </div>
+            </div>            
+        </div>
+
+----------------
+BoardEdit.js
+
+<div>            
+            <Form>
+            <input type="hidden" name="no" value={board.no} />                
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}> 제목 </Form.Label>              
+                <Col sm={10}>
+                    <Form.Control type="text" placeholder="제목" 
+                        name="title" value={board.title} 
+                        onChange={handleInputChange}/>
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>
+                    작성자
+                </Form.Label>
+                <Col sm={10}>
+                    <Form.Control type="text" placeholder="작성자" 
+                        name="name" value={board.name} 
+                        onChange={handleInputChange} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalPassword">
+                <Form.Label column sm={2}>
+                    비밀번호
+                </Form.Label>
+                <Col sm={10}>
+                <Form.Control type="password" placeholder="비밀번호" 
+                    name="pwd" value={board.pwd} 
+                    onChange={handleInputChange}/>
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>
+                    이메일
+                </Form.Label>
+	<Col sm={10}>
+                    <Form.Control type="text" placeholder="이메일" 
+                        name="email" value={board.email} 
+                        onChange={handleInputChange} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                <Form.Label column sm={2}>
+                    내용
+                </Form.Label>
+                <Col sm={10}>
+                    <Form.Control as="textarea" rows={9} 
+                        name="content" value={board.content} 
+                        onChange={handleInputChange}/>
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+                <Col sm={{ span: 10, offset: 2 }}>
+                <Button type="button" >수정</Button>{' '}
+                <Button type = "button" variant="danger">
+                    목록</Button>{' '}
+                <Button type="button" >취소</Button>{' '}    
+                </Col>
+            </Form.Group>
+            </Form>
+        </div>
+
+
+----------------
+BoardDelete.js
+
+
+<div className="divDelete">
+          <input type="hidden" name="no" value={bid} />        
+          <h2>글 삭제</h2>
+          <div>           
+            <span class="sp"> 번 글을 삭제하시겠습니까?</span>                        
+          </div>
+          <div>           
+                <label >비밀번호</label>
+                <input type="password"  name="pwd"  /> 
+          </div>
+          <div className="center">
+              <input type = "button" value="삭제" />{ ' '}              
+              <input type = "Button" value="글목록" />
+          </div>
+      </div>
+
+
+

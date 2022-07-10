@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.leen.leenclair.freeboard.model.FreeBoardDAO">
+
+	<insert id="insertBoard" parameterType="FreeBoardVO">
+		<selectKey resultType="int" keyProperty="btNo" order="BEFORE">
+			select freeboard_seq.nextval from dual
+		</selectKey>
+		insert into free_board(bt_no,no,div_bd_no,title,content,groupno,f_name,f_origine,f_size)
+		values(#{btNo},#{no},#{divBdNo},#{title},#{content},#{btNo},#{fName},#{fOrigine},#{fSize})
+	</insert>
+	
+	<sql id="searchWhere">
+		<where>
+		<if test="searchKeyword !=null and searchKeyword !=''">
+        		${searchCondition} 
+        		like '%' || #{searchKeyword} || '%'
+        </if>
+        
+        </where>
+	</sql>
+	
+	<sql id="searchWhere2">
+		<if test="searchKeyword !=null and searchKeyword !=''">
+        		and ${searchCondition} 
+        		like '%' || #{searchKeyword} || '%'
+        </if>
+	</sql>
+	
+	<select id="selectAll" parameterType="searchVo" resultType="freeboardVo">
+		select *
+		from
+		(
+		    select rownum as RNUM, A.*
+		    from
+		    (
+		        select B.*, (sysdate-B.regdate)*24 as dateTerm,m.userid from free_board B,member m
+		        where B.no=m.no and B.div_bd_no=1
+		        <include refid="searchWhere2"></include>
+		        order by groupno desc, sortno
+		    )A
+		)
+		where RNUM>#{firstRecordIndex} 
+		<![CDATA[
+		and RNUM<=#{firstRecordIndex} + #{recordCountPerPage} ]]>
+	</select>
+	
+	<select id="getTotalRecord" parameterType="searchVo" resultType="int">	
+		select count(*) from free_board 
+		<include refid="searchWhere"></include>
+	</select>
+	
+	<select id="selectByNo" parameterType="int" resultType="FreeBoardVO">
+		select * from free_board where bt_no=#{btNo} order by regdate desc
+	</select>
+	
+	<update id="updateDownCount" parameterType="int">
+		update free_board set f_count=f_count+1
+		where bt_no=#{btNo}
+	</update>
+	
+	<update id="updateBoard" parameterType="FreeBoardVo">
+		update free_board
+		set title=#{title}, content=#{content}
+		<if test="FName !=null and FName!=''">
+			,f_name=#{fName}, f_size=#{fSize}, f_origine=#{fOrigine}
+		</if>
+		where bt_No=#{btNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete free_board where bt_no=#{btNo}
+	</delete>	
+</mapper>
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.leen.leenclair.comments.model.CommentsDAO">
+
+	<insert id="insertComments" parameterType="CommentsVO">
+		<selectKey resultType="int" keyProperty="cNo" order="BEFORE">
+			select comments_seq.nextval from dual
+		</selectKey>
+		insert into comments(c_no,bt_no,c_id,c_content,groupno)
+		values(#{cNo},#{btNo},#{cId},#{cContent},#{cNo})
+	</insert>
+	
+	<select id="selectCommentsAll" parameterType="int" resultType="CommentsVO">
+		select * from comments where bt_no=#{btNo} order by groupno desc, sortno
+	</select>
+	
+	<insert id="insertreComment" parameterType="CommentsVO">
+		<selectKey resultType="int" keyProperty="cNo" order="BEFORE">
+			select comments_seq.nextval from dual
+		</selectKey>
+		insert into comments(c_No, bt_No, c_Id, c_Content,groupNo,step,sortno)
+		values(#{cNo}, #{btNo}, #{cId}, #{cContent},#{groupno},#{step}+1,#{sortno}+1)
+	</insert>
+	
+	<update id="updatereComment" parameterType="CommentsVO">
+		update comments set sortno = sortno + 1 
+		where groupno = #{groupno} and sortno > #{sortno}
+		
+	</update>
+	
+	<update id="updateComment" parameterType="CommentsVO">
+		<if test='editflag=="Y"'>
+			update comments 
+			set c_content=#{cContent}, editflag='N' where c_no=#{cNo}
+		</if>
+		<if test='editflag=="N"'>
+			update comments 
+			set c_content=#{cContent}, editflag='Y' where c_no=#{cNo}
+		</if>
+	</update>
+	
+	<select id="selectByCNo" parameterType="int" resultType="CommentsVO">
+		select * from comments where c_no=#{cNo}
+	</select>
+	
+	<update id="updateCommentEdit" parameterType="CommentsVO">
+		<if test='editflag=="N"'>
+		update comments 
+		set editflag='Y' where c_no=#{cNo}
+		</if>
+		<if test='editflag=="Y"'>
+		update comments 
+		set editflag='N' where c_no=#{cNo}
+		</if>
+	</update>
+	
+	<parameterMap type="map" id="replyDeleteParam">
+		<parameter property="groupno" javaType="string" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="step" javaType="string" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="CNo" javaType="string" jdbcType="VARCHAR" mode="IN"/>
+	</parameterMap>
+	
+	<delete id="deleteReply" parameterMap="replyDeleteParam">
+		call replyDelete(?,?,?)
+	</delete>
+		
+</mapper>
